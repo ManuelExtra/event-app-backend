@@ -1,38 +1,38 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const userValidation = require('../../validations/user.validation');
-const userController = require('../../controllers/user.controller');
+// const userValidation = require('../../validations/user.validation');
+const eventController = require('../../controllers/event.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
+  .post(auth('createEvent'), eventController.createEvent)
+//   .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
 
-router
-  .route('/:userId')
-  .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
-  .patch(auth('manageUsers'), validate(userValidation.updateUser), userController.updateUser)
-  .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
+// router
+//   .route('/:userId')
+//   .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
+//   .patch(auth('manageUsers'), validate(userValidation.updateUser), userController.updateUser)
+//   .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: User management and retrieval
+ *   name: Event
+ *   description: Events creation
  */
 
 /**
  * @swagger
- * /users:
+ * /event:
  *   post:
- *     summary: Create a user
- *     description: Only admins can create other users.
- *     tags: [Users]
+ *     summary: Create an event
+ *     description: Users can create an event
+ *     tags: [Event]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -42,37 +42,76 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - name
- *               - email
- *               - password
- *               - role
+ *               - user
+ *               - title
+ *               - category
+ *               - language
+ *               - country
+ *               - first_name
+ *               - last_name
+ *               - planner_email
+ *               - format
+ *               - venue
+ *               - event_date
+ *               - event_time
  *             properties:
- *               name:
+ *               user:
  *                 type: string
- *               email:
- *                 type: string
- *                 format: email
  *                 description: must be unique
- *               password:
+ *               title:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *               role:
+ *                 description: must be unique
+ *               category:
+ *                 type: string
+ *                 description: must be unique
+ *               language:
+ *                 type: string
+ *                 description: must be unique
+ *               country:
  *                  type: string
- *                  enum: [user, admin]
+ *                  description: must be unique
+ *               first_name:
+ *                  type: string
+ *                  description: must be unique
+ *               last_name:
+ *                  type: string
+ *                  description: must be unique
+ *               planner_email:
+ *                  type: string
+ *                  description: must be unique
+ *               format:
+ *                  type: string
+ *                  enum: [in person, virtual]
+ *                  description: must be unique
+ *               venue:
+ *                  type: string
+ *                  description: must be unique
+ *               event_date:
+ *                  type: string
+ *                  description: must be unique
+ *               event_time:
+ *                  type: string
+ *                  description: must be unique
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
- *               role: user
+ *               user: 6547cbeb8a9bebcb72cb48ca
+ *               title: My birthday
+ *               category: other
+ *               language: English
+ *               country: Nigeria
+ *               first_name: John
+ *               last_name: Doe
+ *               planner_email: johndoe@gmail.com
+ *               format: virtual
+ *               venue: Crescent area
+ *               event_date: 11-13-2001
+ *               event_time: 07:00am
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Event'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -83,7 +122,7 @@ module.exports = router;
  *   get:
  *     summary: Get all users
  *     description: Only admins can retrieve all users.
- *     tags: [Users]
+ *     tags: [Event]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -152,7 +191,7 @@ module.exports = router;
  *   get:
  *     summary: Get a user
  *     description: Logged in users can fetch only their own user information. Only admins can fetch other users.
- *     tags: [Users]
+ *     tags: [Event]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -179,7 +218,7 @@ module.exports = router;
  *   patch:
  *     summary: Update a user
  *     description: Logged in users can only update their own information. Only admins can update other users.
- *     tags: [Users]
+ *     tags: [Event]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -230,7 +269,7 @@ module.exports = router;
  *   delete:
  *     summary: Delete a user
  *     description: Logged in users can delete only themselves. Only admins can delete other users.
- *     tags: [Users]
+ *     tags: [Event]
  *     security:
  *       - bearerAuth: []
  *     parameters:

@@ -2,11 +2,11 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { userService } = require('../services');
+const { eventService } = require('../services');
 
-const createUser = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body);
-  res.status(httpStatus.CREATED).send(user);
+const createEvent = catchAsync(async (req, res) => {
+  const event = await eventService.createEvent(req.body);
+  res.status(httpStatus.CREATED).send(event);
 });
 
 const getUsers = catchAsync(async (req, res) => {
@@ -35,7 +35,7 @@ const deleteUser = catchAsync(async (req, res) => {
 });
 
 module.exports = {
-  createUser,
+  createEvent,
   getUsers,
   getUser,
   updateUser,
